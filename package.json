@@ -35,6 +35,6 @@
   "dependencies": {
     "@phosphor-icons/react": "^2.1.7",
     "@radix-ui/react-dropdown-menu": "^2.1.14",
-    "@recogito/studio-sdk": "^0.6.1"
+    "@recogito/studio-sdk": "^0.6.2"
   }
 }
