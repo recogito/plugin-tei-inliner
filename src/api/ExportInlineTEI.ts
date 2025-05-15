@@ -9,7 +9,7 @@ export const GET: APIRoute = async ({ request, params, cookies }) => {
   return new Response(JSON.stringify({ message: 'TODO' }), {
     headers: {
       'Content-Type': 'text/json',
-      'Content-Disposition': `attachment;filename=${filename}`
+      // 'Content-Disposition': `attachment;filename=${filename}`
     },
     status: 200
   });
