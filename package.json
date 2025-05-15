@@ -1,0 +1,40 @@
+{
+  "name": "@recogito/plugin-tei-inliner",
+  "version": "0.1.0",
+  "description": "A plugin for exporting TEI annotations as inline markup",
+  "homepage": "https://github.com/recogito/plugin-tei-inliner#readme",
+  "bugs": {
+    "url": "https://github.com/recogito/plugin-tei-inliner/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/recogito/plugin-tei-inliner.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "scripts": {
+    "dev": "npm start --prefix .dev/",
+    "build": "tsc"
+  },
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./ExportInlinedTEIMenuItem": "./dist/extensions/ExportInlinedTEIMenuItem.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.18",
+    "@types/react": "^19.1.4",
+    "@types/react-dom": "^19.1.5",
+    "astro": "^5.7.13",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@phosphor-icons/react": "^2.1.7",
+    "@radix-ui/react-dropdown-menu": "^2.1.14",
+    "@recogito/studio-sdk": "^0.6.1"
+  }
+}

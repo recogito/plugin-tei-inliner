@@ -1,0 +1,60 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { PluginRegistry, ExtensionMount } from '../plugins';
+
+let fixtures = {};
+try {
+  fixtures = await import('../../../test/fixtures.json').then(m => m.default);
+} catch (error) {
+  fixtures = {};
+}
+
+const extensions = PluginRegistry.enumerateExtensions();
+
+const getTestData = (extensionPoint: string) => (fixtures as any)[extensionPoint] || {};
+---
+
+<Layout>
+  <main>
+    <ul>
+      {extensions.map(({ extension, plugin }) => ( 
+        <li>
+          <code>{extension.extension_point}</code>
+          <div class="extension-container">
+            <ExtensionMount 
+              client:only="react"
+              extension={extension} 
+              plugin={plugin} 
+              {...getTestData(extension.extension_point)} />
+          </div>
+        </li>
+      ))}
+    </ul>
+  </main> 
+</Layout>
+
+<style>
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0 0 2rem 0;
+  }
+
+  li {
+    margin-top: 2rem;
+    max-width: 600px;
+  }
+
+  li code {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .extension-container {
+    background-color: #fff;
+    box-shadow: 2px 2px 18px rgba(0, 0, 0, 0.18);
+    border-radius: 0.25rem;
+    margin: 0.5rem 0;
+    overflow: hidden;
+  }
+</style>

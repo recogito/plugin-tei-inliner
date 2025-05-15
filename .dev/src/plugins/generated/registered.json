@@ -1,0 +1,16 @@
+[
+  {
+    "name": "TEI Inliner Plugin",
+    "module_name": "@recogito/plugin-tei-inliner",
+    "description": "A plugin for exporting TEI annotations as inline markup.",
+    "author": "Performant Software",
+    "homepage": "https://www.performantsoftware.com/",
+    "extensions": [
+      {
+        "name": "export-inlined-tei-menu-item",
+        "component_name": "ExportInlinedTEIMenuItem",
+        "extension_point": "project:document-actions"
+      }
+    ]
+  }
+]
