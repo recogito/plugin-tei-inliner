@@ -27,8 +27,16 @@ const TEIInlinerPlugin: Plugin = {
 const plugin = (): AstroIntegration => ({
   name: "plugin-tei-inliner",
   hooks: {
-    "astro:config:setup": ({ config, logger }) => {
+    "astro:config:setup": ({ config, logger, injectRoute }) => {
       registerPlugin(TEIInlinerPlugin, config, logger);
+
+      logger.info('Injecting new API route: /api/[projectId]/export/inline-tei');
+      
+      injectRoute({
+        pattern: '/api/[projectId]/export/inline-tei',
+        entrypoint: 'node_modules/@recogito/plugin-tei-inliner/src/api/ExportInlineTEI.ts',
+        prerender: false
+      })
     },
   },
 });
