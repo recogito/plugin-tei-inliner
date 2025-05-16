@@ -1,5 +1,49 @@
-import { createServerSDK } from '@recogito/studio-sdk';
+import { AnnotationBody } from '@annotorious/core';
+import { parseXML } from '@recogito/standoff-converter';
+import { createServerSDK, SupabaseAnnotation } from '@recogito/studio-sdk';
+import { TEIAnnotationTarget } from '@recogito/text-annotator-tei';
 import type { APIRoute } from 'astro';
+
+// Helper to test if this annotation should be interpreted as a TEI tag
+const isTag = (annotation: SupabaseAnnotation, tagName: string) => {
+  const { bodies } = annotation;
+  return bodies.some(b => {
+    const body = b as AnnotationBody;
+    if (!(body.purpose === 'tagging') || !(typeof body.value === 'string')) return;
+
+    try {
+      const value = JSON.parse(body.value);
+      return value.id === tagName || value.label === tagName;
+    } catch {
+      return body.value === tagName;
+    }
+  });
+}
+
+const inlineAnnotation = (annotation: SupabaseAnnotation, parsed: ReturnType<typeof parseXML>) => {
+  const insertTag = (tagName: string) => {
+    const { selector } = (annotation.target as TEIAnnotationTarget);
+  
+    selector.forEach(selector => {
+      const { startSelector, endSelector } = selector;
+
+      try {
+        const startOffset = parsed.getCharacterOffset(startSelector.value);
+        const endOffset = parsed.getCharacterOffset(endSelector.value);
+        parsed.addInline(startOffset, endOffset, tagName);
+      } catch (error) {
+        // console.error(error);
+      }
+    });
+  }
+
+  // We'll check for (and insert) these tags
+  const tags = ['placeName', 'persName'];
+
+  tags.forEach(t => {
+    if (isTag(annotation, t)) insertTag(t)
+  });
+}
 
 export const GET: APIRoute = async ({ request, params, cookies }) => {
   const projectId = params.projectId;
@@ -31,6 +75,7 @@ export const GET: APIRoute = async ({ request, params, cookies }) => {
     return new Response(JSON.stringify({ error: storageError?.message }));
 
   const xml = await blob.text();
+  const parsed = parseXML(xml);
 
   // 4. Get layers
   const { error: layersError, data: layers } = await sdk.layers.getDocumentLayersInProject(documentId!, projectId!);
@@ -44,10 +89,11 @@ export const GET: APIRoute = async ({ request, params, cookies }) => {
   if (anntotationsError || !annotations)
     return new Response(JSON.stringify({ message: anntotationsError?.message }));
 
-  // TODO: magic happens
+  annotations.forEach(a => inlineAnnotation(a, parsed));
+
   const filename = `${projectId}-${documentId}.json`;
 
-  return new Response(xml, {
+  return new Response(parsed.xmlString(), {
     headers: {
       'Content-Type': 'text/xml',
       // 'Content-Type': 'application/tei+xml',

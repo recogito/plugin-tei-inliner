@@ -24,6 +24,7 @@
     "./ExportInlinedTEIMenuItem": "./dist/extensions/ExportInlinedTEIMenuItem.js"
   },
   "devDependencies": {
+    "@annotorious/core": "^3.3.6",
     "@types/node": "^22.15.18",
     "@types/react": "^19.1.4",
     "@types/react-dom": "^19.1.5",
@@ -35,7 +36,8 @@
   "dependencies": {
     "@phosphor-icons/react": "^2.1.7",
     "@radix-ui/react-dropdown-menu": "^2.1.14",
-    "@recogito/standoff-converter": "^0.1.6",
-    "@recogito/studio-sdk": "^0.6.2"
+    "@recogito/standoff-converter": "^0.1.8",
+    "@recogito/studio-sdk": "^0.6.2",
+    "@recogito/text-annotator-tei": "^3.0.2"
   }
 }
