@@ -45,9 +45,11 @@ const inlineAnnotation = (annotation: SupabaseAnnotation, parsed: ReturnType<typ
   });
 }
 
-export const GET: APIRoute = async ({ request, params, cookies }) => {
+export const GET: APIRoute = async ({ request, params, cookies, url }) => {
   const projectId = params.projectId;
   const documentId = params.documentId;
+
+  const contextId = url.searchParams.get('context');
 
   if (!projectId || !documentId)
     // Should never happen
@@ -78,7 +80,14 @@ export const GET: APIRoute = async ({ request, params, cookies }) => {
   const parsed = parseXML(xml);
 
   // 4. Get layers
-  const { error: layersError, data: layers } = await sdk.layers.getDocumentLayersInProject(documentId!, projectId!);
+  const getLayers = () => {
+    if (contextId)
+      return sdk.layers.getDocumentLayersInContext(documentId, contextId);
+    else
+      return sdk.layers.getDocumentLayersInProject(documentId!, projectId!);
+  }
+
+  const { error: layersError, data: layers } = await getLayers();
   if (layersError || !layers)
     return new Response(JSON.stringify({ message: layersError?.message }));
 
@@ -95,9 +104,8 @@ export const GET: APIRoute = async ({ request, params, cookies }) => {
 
   return new Response(parsed.xmlString(), {
     headers: {
-      'Content-Type': 'text/xml',
-      // 'Content-Type': 'application/tei+xml',
-      // 'Content-Disposition': `attachment;filename=${filename}`
+      'Content-Type': 'application/tei+xml',
+      'Content-Disposition': `attachment;filename=${filename}`
     },
     status: 200
   });
