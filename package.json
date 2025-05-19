@@ -34,7 +34,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@phosphor-icons/react": "^2.1.8",
+    "@phosphor-icons/react": "2.1.7",
     "@radix-ui/react-dropdown-menu": "^2.1.14",
     "@recogito/standoff-converter": "^0.1.8",
     "@recogito/studio-sdk": "^0.6.2",

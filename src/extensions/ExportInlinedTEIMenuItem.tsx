@@ -1,4 +1,4 @@
-import { CodeIcon } from '@phosphor-icons/react';
+import { Code } from '@phosphor-icons/react';
 import * as Dropdown from '@radix-ui/react-dropdown-menu';
 import { DocumentCardActionsExtensionProps } from '@recogito/studio-sdk';
 
@@ -7,7 +7,7 @@ export const ExportInlinedTEIMenuItem = (props: DocumentCardActionsExtensionProp
   return (
     <Dropdown.Item className="dropdown-item">
       <a href={`/api/${props.projectId}/${props.document?.id}/export/inline-tei`}>
-        <CodeIcon size={16}/> Export Flattened TEI 
+        <Code size={16}/> Export Flattened TEI 
       </a>
     </Dropdown.Item>
   )
