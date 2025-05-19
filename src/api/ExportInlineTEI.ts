@@ -65,7 +65,7 @@ export const GET: APIRoute = async ({ request, params, cookies }) => {
     return new Response(JSON.stringify({ error: 'Not authorized' }));
 
   // 2. Get document
-  const { error: documentError, data: document } = await sdk.document.get(documentId);
+  const { error: documentError, data: document } = await sdk.documents.get(documentId);
   if (documentError || !document)
     return new Response(JSON.stringify({ error: documentError?.message }));
 
