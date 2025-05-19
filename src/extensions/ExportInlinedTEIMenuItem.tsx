@@ -1,4 +1,4 @@
-import { Code } from '@phosphor-icons/react';
+import { PuzzlePiece } from '@phosphor-icons/react';
 import { DocumentCardActionsExtensionProps } from '@recogito/studio-sdk';
 
 export const ExportInlinedTEIMenuItem = (props: DocumentCardActionsExtensionProps) => {
@@ -11,7 +11,7 @@ export const ExportInlinedTEIMenuItem = (props: DocumentCardActionsExtensionProp
 
   return (
     <a href={url}>
-      <Code size={16}/> Export Flattened TEI 
+      <PuzzlePiece size={16}/> Export TEI: Convert Annotations to Inline Format 
     </a>
   )
 

@@ -100,7 +100,7 @@ export const GET: APIRoute = async ({ request, params, cookies, url }) => {
 
   annotations.forEach(a => inlineAnnotation(a, parsed));
 
-  const filename = `${projectId}-${documentId}.json`;
+  const filename = `${projectId}-${documentId}.xml`;
 
   return new Response(parsed.xmlString(), {
     headers: {
