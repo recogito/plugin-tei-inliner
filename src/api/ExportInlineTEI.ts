@@ -1,5 +1,5 @@
 import { AnnotationBody } from '@annotorious/core';
-import { parseXML } from '@recogito/standoff-converter';
+import { parseXML, isInlinable } from '@recogito/standoff-converter';
 import { createServerSDK, SupabaseAnnotation } from '@recogito/studio-sdk';
 import { TEIAnnotationTarget } from '@recogito/text-annotator-tei';
 import type { APIRoute } from 'astro';
@@ -93,11 +93,17 @@ export const GET: APIRoute = async ({ request, params, cookies, url }) => {
 
   const layerIds = layers.map((l) => l.id);
 
-  // 5. Get annotations
+  // 5. Get Recogito annotations
   const { error: anntotationsError, data: annotations } = await sdk.annotations.get(layerIds);
   if (anntotationsError || !annotations)
     return new Response(JSON.stringify({ message: anntotationsError?.message }));
 
+  // 6. Get inlinable embedded standoff annotations
+  const standOffAnnotations = parsed.annotations()
+    .filter(a => isInlinable(a));
+    // TODO Recogito Annotations override co-located standOffAnnotations!
+
+  standOffAnnotations.forEach(a => parsed.convertToInline(a));
   annotations.forEach(a => inlineAnnotation(a, parsed));
 
   const filename = `${projectId}-${documentId}.xml`;
