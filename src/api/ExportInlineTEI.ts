@@ -1,5 +1,5 @@
 import { AnnotationBody } from '@annotorious/core';
-import { parseXML, isInlinable } from '@recogito/standoff-converter';
+import { parseXML, isInlinable, StandoffAnnotation } from '@recogito/standoff-converter';
 import { createServerSDK, SupabaseAnnotation } from '@recogito/studio-sdk';
 import { TEIAnnotationTarget } from '@recogito/text-annotator-tei';
 import type { APIRoute } from 'astro';
@@ -18,6 +18,22 @@ const isTag = (annotation: SupabaseAnnotation, tagName: string) => {
       return body.value === tagName;
     }
   });
+}
+
+/** 
+ * Tests if there are any co-located Recogito Studio annotations for the 
+ * given standoff annotation.
+ */
+const hasColocated = (s: StandoffAnnotation, annotations: SupabaseAnnotation[]) => {
+
+  // TODO
+  const isColocated = (s: StandoffAnnotation, a: SupabaseAnnotation) => {
+
+  }
+
+  // TODO
+  return false;
+
 }
 
 const inlineAnnotation = (annotation: SupabaseAnnotation, parsed: ReturnType<typeof parseXML>) => {
@@ -100,8 +116,9 @@ export const GET: APIRoute = async ({ request, params, cookies, url }) => {
 
   // 6. Get inlinable embedded standoff annotations
   const standOffAnnotations = parsed.annotations()
-    .filter(a => isInlinable(a));
-    // TODO Recogito Annotations override co-located standOffAnnotations!
+    .filter(s => isInlinable(s))
+    // Recogito Annotations override co-located standOffAnnotations!
+    .filter(s => !hasColocated(s, annotations));
 
   standOffAnnotations.forEach(a => parsed.convertToInline(a));
   annotations.forEach(a => inlineAnnotation(a, parsed));
