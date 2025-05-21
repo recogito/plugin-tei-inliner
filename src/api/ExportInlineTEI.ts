@@ -25,15 +25,19 @@ const isTag = (annotation: SupabaseAnnotation, tagName: string) => {
  * given standoff annotation.
  */
 const hasColocated = (s: StandoffAnnotation, annotations: SupabaseAnnotation[]) => {
-
-  // TODO
+  
   const isColocated = (s: StandoffAnnotation, a: SupabaseAnnotation) => {
+    const sStart = `${s.start.path}::${s.start.offset}`;
+    const sEnd = `${s.end.path}::${s.end.offset}`;
 
+    // Consider annotations co-located if any of the Supabase annotation's
+    // selectors match the standoff annotation boundaries
+    const { selector } = (a.target as TEIAnnotationTarget);
+    return selector.some(s =>
+      sStart === s.startSelector.value && sEnd === s.endSelector.value);
   }
 
-  // TODO
-  return false;
-
+  return annotations.some(a => isColocated(s, a));
 }
 
 const inlineAnnotation = (annotation: SupabaseAnnotation, parsed: ReturnType<typeof parseXML>) => {
