@@ -70,7 +70,8 @@ export const GET: APIRoute = async ({ request, params, cookies, url }) => {
   const documentId = params.documentId;
 
   const contextId = url.searchParams.get('context');
-
+  const includeStandOff = url.searchParams.get('standoff') === 'true';
+  
   if (!projectId || !documentId)
     // Should never happen
     throw new Error('Missing project or document ID');
@@ -118,13 +119,16 @@ export const GET: APIRoute = async ({ request, params, cookies, url }) => {
   if (anntotationsError || !annotations)
     return new Response(JSON.stringify({ message: anntotationsError?.message }));
 
-  // 6. Get inlinable embedded standoff annotations
-  const standOffAnnotations = parsed.annotations()
-    .filter(s => isInlinable(s))
-    // Recogito Annotations override co-located standOffAnnotations!
-    .filter(s => !hasColocated(s, annotations));
+  if (includeStandOff) {
+    // 6. Get inlinable embedded standoff annotations
+    const standOffAnnotations = parsed.annotations()
+      .filter(s => isInlinable(s))
+      // Recogito Annotations override co-located standOffAnnotations!
+      .filter(s => !hasColocated(s, annotations));
 
-  standOffAnnotations.forEach(a => parsed.convertToInline(a));
+    standOffAnnotations.forEach(a => parsed.convertToInline(a));
+  }
+  
   annotations.forEach(a => inlineAnnotation(a, parsed));
 
   const filename = `${projectId}-${documentId}.xml`;
