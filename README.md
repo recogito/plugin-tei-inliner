@@ -1,6 +1,6 @@
 # TEI Inline Markup Exporter Plugin
 
-A Recogito Studio plugin for exporting TEI annotations as inline markup.
+A Recogito Studio plugin for exporting TEI annotations as inline markup. Based on [TEI Standoff Converter](https://github.com/recogito/tei-standoffconverter-js).
 
 This plugin enables export of annotations as embedded tags in your TEI source, providing more natural integration with downstream TEI workflows.
 
