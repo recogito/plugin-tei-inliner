@@ -13,6 +13,8 @@ const TEIInlinerPlugin: Plugin = {
 
   homepage: 'https://www.performantsoftware.com/',
 
+  thumbnail: 'thumbnail.jpg',
+
   extensions: [{
 
     name: 'export-inlined-tei-menu-item',

@@ -17,11 +17,13 @@
   "type": "module",
   "scripts": {
     "dev": "npm start --prefix .dev/",
-    "build": "tsc"
+    "build": "tsc && npm run copy-files",
+    "copy-files": "copyfiles -u 1 \"src/**/*.css\" \"src/**/*.jpg\" dist"
   },
   "main": "src/index.ts",
   "exports": {
     ".": "./dist/index.js",
+    "./thumbnail.jpg": "./dist/assets/thumbnail.jpg",
     "./ExportInlinedTEIMenuItem": "./dist/extensions/ExportInlinedTEIMenuItem.js"
   },
   "devDependencies": {
@@ -30,6 +32,7 @@
     "@types/react": "^19.1.4",
     "@types/react-dom": "^19.1.5",
     "astro": "^5.7.13",
+    "copyfiles": "^2.4.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "typescript": "^5.8.3"
